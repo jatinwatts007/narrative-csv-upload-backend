@@ -12,6 +12,7 @@
 -- Authentication and Authorization\
 -- Complete CRUD operations on data (Create, Read, Update, Delete)\
 -- Upload multiple files in one go using multi threading.\
+-- Better DB Design.\
 -- Bulk operation to update, create data in batches to reduce db calls.\
 -- Robust Error handing\
 -- Efficiently handle CSV files with mixed data types and multiple sheets using robust libraries like pandas for parsing, cleaning, and formatting.\
