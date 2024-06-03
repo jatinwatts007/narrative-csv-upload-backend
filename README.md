@@ -8,7 +8,7 @@
 
 
 
-# Backend Possible Optimasations:
+# Backend Possible Optimisations:
 -- Authentication and Authorization\
 -- Complete CRUD operations on data (Create, Read, Update, Delete)\
 -- Upload multiple files in one go using multi threading.\
