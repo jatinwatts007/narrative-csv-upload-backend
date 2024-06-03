@@ -1,6 +1,6 @@
 # narrative-csv-upload-backend
 
--- Download Docker Desktop and configure
+-- Download Docker Desktop and configure __
 -- open terminal and go to project path
 -- Run docker-compose build (if see unauthorised error. Run "docker login" cmd on terminal and provide username/email and possword and build agian)
 -- Run docker-compose up
