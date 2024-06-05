@@ -20,6 +20,10 @@
 -- Supporting multiple types of document extensions like .DOC, .DOCX, .TXT, PDF etc\
 -- Geocoding API to get a State from location, city, address etc\
 -- Proper commenting for easy understanding\
--- S3 buckets for storing files \ 
--- Better code structure with OOPs for Modularity, Reusability, Maintainability and Scalability
+-- S3 buckets for storing files\ 
+-- Better code structure with OOPs for Modularity, Reusability, Maintainability and Scalability\
+
+
+# Optimisations:
+-- Google maps geocoding API integrated
 
