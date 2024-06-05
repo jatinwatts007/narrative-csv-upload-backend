@@ -17,8 +17,8 @@ class CSVMetaData(models.Model):
 
 class CountryProfile(models.Model):
     id = models.AutoField(primary_key=True)
-    country_name = models.CharField(max_length=500)
-    country_code = models.CharField(max_length=10, unique=True)
+    country_name = models.CharField(max_length=500, null=True, default=None)
+    country_code = models.CharField(max_length=10, null=True, default=None)
 
     class Meta:
         db_table = 'country_profile'
@@ -26,7 +26,8 @@ class CountryProfile(models.Model):
 
 class StateProfile(models.Model):
     id = models.AutoField(primary_key=True)
-    state_name = models.CharField(max_length=500, null=False, blank=False)
+    state_name = models.CharField(max_length=500, null=True, blank=False)
+    state_code = models.CharField(max_length=10, null=True, default=None)
     country_id = models.ForeignKey(CountryProfile, on_delete=models.CASCADE, db_column='country_id', to_field='id',
                                    default=None, null=True)
 
@@ -56,8 +57,10 @@ class StudentProfile(models.Model):
     name = models.CharField(max_length=400, null=True)
     subject_id = models.ForeignKey(SubjectProfile, on_delete=models.CASCADE, db_column='subject_id', to_field='id')
     school_id = models.ForeignKey(SchoolProfile, on_delete=models.CASCADE, db_column='school_id', to_field='id')
-    state = models.CharField(max_length=500, null=True)
-    csv_id = models.ForeignKey(CSVMetaData, on_delete=models.CASCADE, db_column='csv_id', to_field='id', default=None, null=True)
+    state_id = models.ForeignKey(StateProfile, on_delete=models.CASCADE, db_column='state_id', to_field='id',
+                                 default=None, null=True)
+    csv_id = models.ForeignKey(CSVMetaData, on_delete=models.CASCADE, db_column='csv_id', to_field='id',
+                               default=None, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
