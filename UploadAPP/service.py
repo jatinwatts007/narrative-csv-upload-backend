@@ -1,12 +1,29 @@
 import csv
 import logging
 
+import boto3
 import googlemaps
+import pandas
 
 from UploadAPP.data import create_student_profile_row, create_csv_file_meta_data
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
+
+
+def connect_to_s3_bucket_and_upload_file(csv_file, file_name):
+    logger.info("Connecting to S3 bucket")
+    s3 = boto3.resource(
+        service_name='s3',
+        region_name='us-east-2',
+        aws_access_key_id='AKIA3FLD4A2I3GYEMM56',
+        aws_secret_access_key='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'
+    )
+    logger.info("Uploading to S3 Bucket")
+    df = pandas.read_csv(csv_file)
+    df.to_csv('upload.csv', encoding='utf-8', index=False)
+    s3.Bucket('narrative-csv-bucket').upload_file('upload.csv', f'{file_name}.csv')
+    logger.info("Successfully uploaded to S3 bucket")
 
 
 def decode_csv_file(csv_file):
@@ -40,7 +57,6 @@ def get_state_country_info_from_geocoding_api(address):
     return state_name, state_code, country_name, country_code
 
 
-
 def create_student_info_row_db(subject_list, name, school, state, csv_instance_id):
     logger.info("Creating student info")
     state_name, state_code, country_name, country_code = get_state_country_info_from_geocoding_api(address=state)
@@ -56,11 +72,11 @@ def upload_file(csv_file):
     file_name = csv_file.name
     file_size = csv_file.size
     csv_instance_id = create_csv_file_meta_data(file_name=file_name, file_size=file_size)
+    connect_to_s3_bucket_and_upload_file(csv_file=csv_file, file_name=csv_instance_id.id)
     decoded_file = decode_csv_file(csv_file)
     reader = csv.DictReader(decoded_file)
     logger.info("Uploading csv file")
     for row in reader:
-        print(row)
         subject_list = []
         name = None
         school = None
@@ -87,5 +103,5 @@ def upload_file(csv_file):
                     else:
                         state += ', ' + address
             create_student_info_row_db(subject_list=subject_list, name=name, school=school, state=state,
-                                            csv_instance_id=csv_instance_id)
-    logger.info("Uploaded csv file")
+                                       csv_instance_id=csv_instance_id)
+    logger.info("File Uploaded")

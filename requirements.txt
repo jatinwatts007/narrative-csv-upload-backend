@@ -3,3 +3,4 @@ djangorestframework~=3.15.1
 django-cors-headers
 pandas
 googlemaps
+boto3
