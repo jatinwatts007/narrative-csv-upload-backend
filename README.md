@@ -27,5 +27,6 @@
 
 
 # Optimisations:
--- Google maps geocoding API integrated
+-- Google maps geocoding API integrated\
+-- S3 AWS Bucket integrated
 
