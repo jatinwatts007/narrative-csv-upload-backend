@@ -24,7 +24,8 @@
 -- S3 buckets for storing files\
 -- Better code structure with OOPs for Modularity, Reusability, Maintainability and Scalabilit\
 -- Google Map API key is directly passed to the Googlemaps SDK\
--- Use of environment variables for secret API Keys
+-- Use of environment variables for secret API Keys\
+-- Scope of ML models to convert different headers of CSV files into the required headers of a database table 
 
 
 # Optimisations:
