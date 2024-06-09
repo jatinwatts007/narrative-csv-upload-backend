@@ -1,5 +1,7 @@
 import logging
 
+from django.db.models import F
+
 from UploadAPP.models import StudentProfile, SubjectProfile, SchoolProfile, CSVMetaData, StateProfile, CountryProfile
 
 logging.basicConfig()
@@ -49,7 +51,7 @@ def get_school_profile_id(school_name):
 
 
 def create_student_profile_row(name=None, subject=None, school=None, state_name=None, state_code=None,
-                               country_name= None, country_code = None, csv_instance_id=None):
+                               country_name=None, country_code=None, csv_instance_id=None):
     logger.info('Creating student profile in database')
 
     subject_profile_id = get_subject_profile_id(subject_name=subject)
@@ -60,3 +62,10 @@ def create_student_profile_row(name=None, subject=None, school=None, state_name=
                                   state_id=state_profile_id, csv_id=csv_instance_id)
     logger.info('Student profile created in database')
     return
+
+
+def get_csv_info_from_database(csv_instance_id):
+    return (StudentProfile.objects.filter(csv_id=csv_instance_id.id)
+            .annotate(school_name=F('school_id__school_name'), subject_name=F('subject_id__subject_name'),
+                      state_name=F('state_id__state_code'), file_name=F('csv_id__file_name'))
+            .values('name', 'school_name', 'state_name', 'subject_name', 'file_name').order_by('created_at'))

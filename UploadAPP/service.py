@@ -1,11 +1,14 @@
+import copy
 import csv
 import logging
 
 import boto3
 import googlemaps
 import pandas
+from django.db.models import F
 
-from UploadAPP.data import create_student_profile_row, create_csv_file_meta_data
+from UploadAPP.data import create_student_profile_row, create_csv_file_meta_data, get_csv_info_from_database
+from UploadAPP.models import StudentProfile
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -69,10 +72,11 @@ def create_student_info_row_db(subject_list, name, school, state, csv_instance_i
 def upload_file(csv_file):
     if csv_file is None:
         return None
+    s3_csv_file_name = copy.deepcopy(csv_file)
     file_name = csv_file.name
     file_size = csv_file.size
     csv_instance_id = create_csv_file_meta_data(file_name=file_name, file_size=file_size)
-    connect_to_s3_bucket_and_upload_file(csv_file=csv_file, file_name=csv_instance_id.id)
+    connect_to_s3_bucket_and_upload_file(csv_file=s3_csv_file_name, file_name=csv_instance_id.id)
     decoded_file = decode_csv_file(csv_file)
     reader = csv.DictReader(decoded_file)
     logger.info("Uploading csv file")
@@ -105,3 +109,8 @@ def upload_file(csv_file):
             create_student_info_row_db(subject_list=subject_list, name=name, school=school, state=state,
                                        csv_instance_id=csv_instance_id)
     logger.info("File Uploaded")
+
+    response = get_csv_info_from_database(csv_instance_id=csv_instance_id)
+    return response
+
+
